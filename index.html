@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ShatterWall – VR brick breaker for Meta Quest</title>
+<meta name="description" content="Aim, bounce, shatter. A turn-based VR brick breaker for Meta Quest: line up one perfect shot and release a stream of up to 60 balls.">
+<meta name="theme-color" content="#04140e">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ShatterWall">
+<meta property="og:description" content="Aim, bounce, shatter. A turn-based VR brick breaker for Meta Quest.">
+<meta property="og:url" content="https://novakbela-code.github.io/shatterwall/">
+<meta property="og:image" content="https://novakbela-code.github.io/shatterwall/images/share.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="images/icon.png">
+<link rel="apple-touch-icon" href="images/icon.png">
+<style>
+  /* Layout: the arena as the page. Hero art, then one round told in order, and a red line before the small print. */
+  @font-face { font-family: "Audiowide"; src: url("fonts/Audiowide-Regular.ttf") format("truetype"); font-display: swap; }
+  :root {
+    --arena: #04140e; --deep: #020a07; --grid: #0b5f80; --text: #e6f4f0; --soft: #a3c2ba;
+    --cyan: #4fe3ee; --danger: #ff3b4a;
+    --display: "Audiowide", "Trebuchet MS", sans-serif;
+    --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--arena); color: var(--text); font: 1.0625rem/1.65 var(--body); }
+  img { display: block; max-width: 100%; }
+  a { color: var(--cyan); text-underline-offset: 3px; overflow-wrap: anywhere; }
+  a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+  h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: 1.2; text-wrap: balance; margin: 0; }
+  p { margin: 0; }
+  .wrap { max-width: 1120px; margin-inline: auto; padding-inline: 20px; }
+
+  .hero { background: var(--deep); border-bottom: 1px solid var(--grid); }
+  .hero img { width: 100%; height: clamp(230px, 30vw, 640px); object-fit: cover; }
+
+  .intro { display: grid; gap: 20px 56px; padding-block: 56px 64px; }
+  .tagline { font-family: var(--display); font-size: clamp(1.6rem, 4vw, 2.5rem); line-height: 1.25; text-wrap: balance; }
+  .lede { color: var(--soft); max-width: 60ch; }
+  .facts { display: flex; flex-wrap: wrap; gap: 8px 28px; padding: 0; margin: 20px 0 0; list-style: none; color: var(--cyan); font-size: .95rem; }
+
+  section > h2 { font-size: clamp(1.35rem, 3vw, 1.8rem); margin-bottom: 32px; }
+  .rounds { list-style: none; margin: 0; padding: 0; display: grid; gap: 56px; }
+  .rounds li { display: grid; gap: 20px 40px; align-items: center; }
+  .rounds img, .gallery img { width: 100%; height: auto; border: 1px solid var(--grid); }
+  .rounds h3 { font-size: 1.3rem; color: var(--cyan); margin-bottom: 8px; }
+  .rounds p { color: var(--soft); max-width: 46ch; }
+
+  .more { padding-block: 80px; }
+  .features { display: grid; gap: 28px 48px; margin: 0; }
+  .features dt { font-family: var(--display); margin-bottom: 4px; }
+  .features dd { margin: 0; color: var(--soft); max-width: 52ch; }
+  .gallery { padding-bottom: 80px; }
+
+  .redline { height: 3px; background: var(--danger); box-shadow: 0 0 18px var(--danger); border: 0; margin: 0; }
+  footer { background: var(--deep); font-size: .95rem; padding-block: 56px 72px; }
+  footer h2 { font-size: 1.2rem; margin-bottom: 16px; }
+  footer h3 { font-family: var(--body); font-weight: 600; font-size: 1rem; margin: 24px 0 6px; }
+  footer ul { margin: 0; padding-left: 20px; color: var(--soft); display: grid; gap: 6px; }
+  footer p { color: var(--soft); }
+  .foot { display: grid; gap: 48px 72px; }
+  .contact { display: grid; gap: 10px; align-content: start; }
+  .contact h2 { margin-bottom: 6px; }
+  .small { font-size: .85rem; margin-top: 48px; }
+
+  @media (min-width: 800px) {
+    .intro { grid-template-columns: 5fr 6fr; align-items: start; }
+    .rounds li { grid-template-columns: 3fr 2fr; }
+    .rounds li:nth-child(even) { grid-template-columns: 2fr 3fr; }
+    .rounds li:nth-child(even) img { order: 2; }
+    .features { grid-template-columns: 1fr 1fr; }
+    .foot { grid-template-columns: 2fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<header class="hero">
+  <h1><img src="images/hero.jpg" width="2400" height="720" alt="ShatterWall"></h1>
+</header>
+
+<main>
+  <div class="wrap intro">
+    <p class="tagline">The wall is coming. You have one shot per round.</p>
+    <div>
+      <p class="lede">ShatterWall is a turn-based brick breaker built for VR. Line up one perfect shot, release a stream of up to 60 balls and watch them ricochet through a neon arena. Break the advancing blocks before they reach the red line.</p>
+      <ul class="facts">
+        <li>Meta Quest 2, 3 and 3S</li>
+        <li>Single player</li>
+        <li>Motion controllers required</li>
+      </ul>
+    </div>
+  </div>
+
+  <section class="wrap">
+    <h2>How a round plays</h2>
+    <ol class="rounds">
+      <li>
+        <img src="images/aim.jpg" width="1600" height="900" alt="A controller aiming a ball; a glowing line bounces off the ceiling towards the numbered blocks">
+        <div><h3>Aim</h3><p>Point your controller and follow the glowing line as it bounces off the walls. Lock the aim and fine-tune it with your wrist, or fly into the arena to check the angles.</p></div>
+      </li>
+      <li>
+        <img src="images/volley.jpg" width="1600" height="900" loading="lazy" alt="A stream of balls zigzagging between the arena walls">
+        <div><h3>Release</h3><p>Every ball you own leaves along the line you aimed. You start with one and hit the +1 pickups to build the stream up to 60.</p></div>
+      </li>
+      <li>
+        <img src="images/chain-reaction.jpg" width="1600" height="900" loading="lazy" alt="Balls hitting blocks while explosions spread through the wall">
+        <div><h3>Shatter</h3><p>The number on a block shows how much it can still take. Set off chain reactions with explosive blocks, bombs, row bombs, shooter blocks and the Blast Ball.</p></div>
+      </li>
+      <li>
+        <img src="images/wall.jpg" width="1600" height="900" loading="lazy" alt="Layers of numbered blocks filling the arena in round 51">
+        <div><h3>Hold the line</h3><p>After each round the blocks move one step closer. If one reaches the red line, the run is over.</p></div>
+      </li>
+    </ol>
+  </section>
+
+  <section class="wrap more">
+    <h2>In the game</h2>
+    <dl class="features">
+      <div><dt>Endless runs</dt><dd>Generated layers get tougher as you go. Beat your best round and volley record.</dd></div>
+      <div><dt>Replays</dt><dd>Runs are recorded automatically on your headset. Change the viewpoint, slow down, freeze, save.</dd></div>
+      <div><dt>Your setup</dt><dd>Tutorial, automatic save, left-handed mode and adjustable view height.</dd></div>
+      <div><dt>Private and offline</dt><dd>No internet connection, account, ads or in-app purchases. The game collects no data.</dd></div>
+    </dl>
+  </section>
+
+  <div class="wrap gallery">
+    <img src="images/outside.jpg" width="1600" height="900" loading="lazy" alt="The arena seen from outside, with dozens of balls in flight">
+  </div>
+</main>
+
+<hr class="redline">
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <h2>Credits</h2>
+        <p>A game by Béla Novák. Made with Unity.</p>
+
+        <h3>Music</h3>
+        <p>By <a href="https://opengameart.org/users/kly">Kim Lightyear (KLY)</a>, licensed under <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>:</p>
+        <ul>
+          <li><a href="https://opengameart.org/content/falling-stars">Falling Stars</a></li>
+          <li><a href="https://opengameart.org/content/hey">Hey!</a></li>
+          <li><a href="https://opengameart.org/content/legends">Legends</a></li>
+          <li><a href="https://opengameart.org/content/starlight-0">Starlight</a></li>
+          <li><a href="https://opengameart.org/content/the-final">The Final</a></li>
+          <li><a href="https://opengameart.org/content/virtual-reality">Virtual Reality</a></li>
+        </ul>
+
+        <h3>3D models</h3>
+        <p>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>:</p>
+        <ul>
+          <li>Ball, modified: based on <a href="https://sketchfab.com/3d-models/scifi-hexsphere-cb364832b9994b768dba6245e6b3f51b">Scifi HexSphere</a> by <a href="https://sketchfab.com/marcoZakaria">Marco Zakaria</a></li>
+          <li>Background: <a href="https://sketchfab.com/3d-models/cosmic-frequencies-c8bb6687b3cc46308c74d189f36a5ec6">Cosmic Frequencies</a> by Tycho Magnetic Anomaly</li>
+          <li>Duck: based on <a href="https://sketchfab.com/3d-models/voxel-duck-c05fae6e185f4832a3e548e8d5f972b3">Voxel Duck</a> by <a href="https://sketchfab.com/rbreve">rbreve</a></li>
+          <li>Replay hand: based on <a href="https://sketchfab.com/3d-models/vr-controller-f67156a0ec5d43c5a0b170df18d68772">VR Controller</a> by <a href="https://sketchfab.com/eltayerkebulan">eltayerkebulan</a></li>
+        </ul>
+
+        <h3>Sound</h3>
+        <ul>
+          <li>Quack: <a href="https://freesound.org/people/tewell/sounds/90027/">FourShortQuacks</a> by tewell, converted to Ogg Vorbis, licensed under <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a></li>
+        </ul>
+
+        <h3>Lettering</h3>
+        <ul>
+          <li>Font: Audiowide by Astigmatic, <a href="fonts/Audiowide-OFL.txt">SIL Open Font License 1.1</a></li>
+          <li>Logo: <a href="https://www.textstudio.com/">Font generator</a></li>
+        </ul>
+      </div>
+
+      <div class="contact">
+        <h2>Contact</h2>
+        <p>Questions, bugs or feedback:<br><a href="mailto:warmagedev@gmail.com">warmagedev@gmail.com</a></p>
+        <p><a href="privacy/">Privacy policy</a></p>
+      </div>
+    </div>
+    <p class="small">Meta Quest is a trademark of Meta Platforms, Inc. ShatterWall is an independent game and is not affiliated with or endorsed by Meta.</p>
+  </div>
+</footer>
+</body>
+</html>
